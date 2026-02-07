@@ -1,0 +1,42 @@
+# Django Framework
+Django==4.2.7
+
+# Image Processing for Pet Photos
+Pillow==10.1.0
+
+# Natural Language Processing for Chatbot
+nltk==3.8.1
+
+# Database (SQLite is built-in, but if you need PostgreSQL support)
+# psycopg2-binary==2.9.9
+
+# Additional NLP Libraries (Optional but recommended)
+python-dateutil==2.8.2
+
+# For text processing in chatbot
+regex==2023.10.3
+
+# Security and Password Hashing (Django built-in, but useful)
+bcrypt==4.1.1
+
+# For form handling and validation
+django-crispy-forms==2.1
+
+# For better admin interface (Optional)
+django-admin-interface==0.26.0
+
+# Timezone support
+pytz==2023.3
+
+# For environment variables (Optional but recommended)
+python-decouple==3.8
+
+# For API development (if needed later)
+djangorestframework==3.14.0
+
+# CORS headers (if you plan to build a separate frontend)
+django-cors-headers==4.3.0
+
+# For testing
+pytest==7.4.3
+pytest-django==4.7.0
