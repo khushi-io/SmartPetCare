@@ -211,3 +211,39 @@ db.sqlite3
 __pycache__/
 .venv/
 env/
+
+# Django / Python
+__pycache__/
+*.pyc
+.env
+db.sqlite3
+
+# Virtual env
+.venv/
+venv/
+env/
+
+# Media uploads (optional – recommend ignoring)
+media/
+
+# Python / Django
+__pycache__/
+*.py[cod]
+db.sqlite3
+.env
+
+# Virtual environments
+venv/
+.venv/
+env/
+
+# Django media (uploads)
+media/
+
+# VS Code
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
+
