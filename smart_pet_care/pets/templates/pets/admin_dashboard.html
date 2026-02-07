@@ -1,0 +1,164 @@
+{% extends 'pets/base.html' %}
+{% load static %}
+
+{% block title %}Admin Dashboard - Smart Pet Care{% endblock %}
+
+{% block content %}
+<div class="page-container">
+    <h1 class="page-title">Admin Dashboard</h1>
+    
+    <div class="dashboard-grid">
+        <div class="stat-card">
+            <div class="stat-number">{{ total_pets|default:0 }}</div>
+            <div class="stat-label">Total Pets</div>
+        </div>
+        
+        <div class="stat-card">
+            <div class="stat-number">{{ available_pets|default:0 }}</div>
+            <div class="stat-label">Available Pets</div>
+        </div>
+        
+        <div class="stat-card">
+            <div class="stat-number">{{ total_users|default:0 }}</div>
+            <div class="stat-label">Registered Users</div>
+        </div>
+        
+        <div class="stat-card">
+            <div class="stat-number">{{ pending_requests|default:0 }}</div>
+            <div class="stat-label">Pending Requests</div>
+        </div>
+    </div>
+    
+    <div class="section">
+        <div class="section-header">
+            <h2 class="section-title">Pending Adoption Requests</h2>
+        </div>
+        
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>User</th>
+                        <th>Pet Name</th>
+                        <th>Breed</th>
+                        <th>Request Date</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for adoption in pending_adoptions %}
+                    <tr>
+                        <td>{{ adoption.user.username }}</td>
+                        <td>{{ adoption.pet.name }}</td>
+                        <td>{{ adoption.pet.breed }}</td>
+                        <td>{{ adoption.request_date|date:"M d, Y" }}</td>
+                        <td><span class="badge badge-pending">Pending</span></td>
+                        <td>
+                            <button class="btn-action btn-approve" onclick="if(confirm('Approve?')) location.href='/adoption/approve/{{ adoption.id }}/'">Approve</button>
+                            <button class="btn-action btn-reject" onclick="if(confirm('Reject?')) location.href='/adoption/reject/{{ adoption.id }}/'">Reject</button>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="6" style="text-align:center; color:rgba(255,255,255,0.5); padding:2rem;">
+                            No pending requests.
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+    <div class="section">
+        <div class="section-header">
+            <h2 class="section-title">Manage Pets</h2>
+            <button class="btn-add" onclick="location.href='/pet/add/'">+ Add New Pet</button>
+        </div>
+        
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Breed</th>
+                        <th>Type</th>
+                        <th>Age</th>
+                        <th>Status</th>
+                        <th>Added Date</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for pet in all_pets %}
+                    <tr>
+                        <td>{{ pet.name }}</td>
+                        <td>{{ pet.breed }}</td>
+                        <td>{{ pet.get_pet_type_display }}</td>
+                        <td>{{ pet.age }} years</td>
+                        <td>
+                            {% if pet.status == 'available' %}
+                                <span class="badge badge-approved">Available</span>
+                            {% elif pet.status == 'adopted' %}
+                                <span class="badge badge-pending">Adopted</span>
+                            {% else %}
+                                <span class="badge badge-pending">Pending</span>
+                            {% endif %}
+                        </td>
+                        <td>{{ pet.added_date|date:"M d, Y" }}</td>
+                        <td>
+                            <button class="btn-action btn-edit" onclick="location.href='/pet/edit/{{ pet.id }}/'">Edit</button>
+                            <button class="btn-action btn-delete" onclick="if(confirm('Delete {{ pet.name }}?')) location.href='/pet/delete/{{ pet.id }}/'">Delete</button>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="7" style="text-align:center; color:rgba(255,255,255,0.5); padding:2rem;">
+                            No pets yet.
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+    <div class="section">
+        <div class="section-header">
+            <h2 class="section-title">Registered Users</h2>
+        </div>
+        
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Username</th>
+                        <th>Full Name</th>
+                        <th>Email</th>
+                        <th>Joined Date</th>
+                        <th>Adoptions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for user_obj in all_users %}
+                    <tr>
+                        <td>{{ user_obj.username }}</td>
+                        <td>{{ user_obj.first_name }} {{ user_obj.last_name }}</td>
+                        <td>{{ user_obj.email }}</td>
+                        <td>{{ user_obj.date_joined|date:"M d, Y" }}</td>
+                        <td>{{ user_obj.adoptions.count }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="5" style="text-align:center; color:rgba(255,255,255,0.5); padding:2rem;">
+                            No users yet.
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

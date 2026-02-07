@@ -1,0 +1,65 @@
+{% extends 'pets/base.html' %}
+{% load static %}
+
+{% block title %}Available Pets - Smart Pet Care{% endblock %}
+
+{% block content %}
+<div class="page-container">
+    <h1 class="page-title">Available Pets for Adoption</h1>
+    
+    <div style="margin-bottom: 2rem; text-align: center;">
+    <button class="btn btn-login"
+            onclick="location.href='?type=all'"
+            style="margin: 0 0.5rem;">
+        All
+    </button>
+
+    <button class="btn btn-login"
+            onclick="location.href='?type=dog'"
+            style="margin: 0 0.5rem;">
+        Dogs
+    </button>
+
+    <button class="btn btn-login"
+            onclick="location.href='?type=cat'"
+            style="margin: 0 0.5rem;">
+        Cats
+    </button>
+
+    <button class="btn btn-login"
+            onclick="location.href='?type=bird'"
+            style="margin: 0 0.5rem;">
+        Birds
+    </button>
+</div>
+
+    
+    <div class="pet-grid">
+        {% for pet in pets %}
+        <div class="pet-card">
+            {% if pet.image %}
+                <img src="{{ pet.image.url }}" class="pet-image" alt="{{ pet.name }}">
+            {% else %}
+                <img src="https://images.unsplash.com/photo-1543466835-00a7907e9de1?w=400&h=300&fit=crop" class="pet-image" alt="{{ pet.name }}">
+            {% endif %}
+            <div class="pet-info">
+                <div class="pet-name">{{ pet.name }}</div>
+                <div class="pet-details">
+                    <p>{{ pet.get_pet_type_display }} • {{ pet.breed }} • {{ pet.age }} years old</p>
+                    <p>{{ pet.description|truncatewords:15 }}</p>
+                </div>
+                {% if user.is_authenticated %}
+                    <button class="feature-btn" onclick="if(confirm('Adopt {{ pet.name }}?')) location.href='/adopt/{{ pet.id }}/'">Adopt Me</button>
+                {% else %}
+                    <button class="feature-btn" onclick="alert('Please login to adopt'); location.href='/login/'">Adopt Me</button>
+                {% endif %}
+            </div>
+        </div>
+        {% empty %}
+        <div style="grid-column: 1 / -1; text-align:center; padding:3rem; color:rgba(255,255,255,0.6);">
+            <p style="font-size:1.2rem;">No pets available for adoption at the moment.</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,5 @@
+first install venv python -m venv venv
+then download all dependencies and softwares using requirements.txt
+than start your project and create all modules needed to you django-admin startproject smart_pet_care (this is the main setting file) 
+create each module using python manage.py startapp pets
+create all html files in the template folder and css and js in static folder

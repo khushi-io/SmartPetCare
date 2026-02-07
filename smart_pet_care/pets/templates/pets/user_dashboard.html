@@ -1,0 +1,162 @@
+{% extends 'pets/base.html' %}
+{% load static %}
+
+{% block title %}Dashboard - Smart Pet Care{% endblock %}
+
+{% block content %}
+<div class="page-container">
+
+    <!-- PAGE TITLE -->
+    <h1 class="page-title">Welcome, {{ user.username }} 👋</h1>
+
+    <!-- =======================
+         DASHBOARD STATS
+    ======================== -->
+    <div class="dashboard-grid">
+        <div class="stat-card">
+            <div class="stat-number">{{ adopted_pets_count }}</div>
+            <div class="stat-label">Adopted Pets</div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-number">{{ active_reminders_count }}</div>
+            <div class="stat-label">Active Reminders</div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-number">{{ pending_adoptions_count }}</div>
+            <div class="stat-label">Pending Requests</div>
+        </div>
+    </div>
+
+    <!-- =======================
+         SMART REMINDERS
+    ======================== -->
+    <div class="section">
+        <h2 class="section-title">🔔 Smart Reminders</h2>
+
+        {% for r in overdue_reminders %}
+        <div class="reminder-card" style="border-left:4px solid #f44336;">
+            <div class="reminder-info">
+                <strong>{{ r.title }}</strong>
+                <p>📅 {{ r.reminder_date }} • ⏰ {{ r.reminder_time }}</p>
+            </div>
+            <div>
+                <button class="btn-action btn-edit"
+                        onclick="location.href='/reminder/edit/{{ r.id }}/'">
+                    Edit
+                </button>
+                <button class="btn-action btn-delete"
+                        onclick="if(confirm('Delete reminder?')) location.href='/reminder/delete/{{ r.id }}/'">
+                    Delete
+                </button>
+            </div>
+        </div>
+        {% endfor %}
+
+        {% for r in today_reminders %}
+        <div class="reminder-card" style="border-left:4px solid #ffc107;">
+            <div class="reminder-info">
+                <strong>{{ r.title }}</strong>
+                <p>📅 {{ r.reminder_date }} • ⏰ {{ r.reminder_time }}</p>
+            </div>
+            <div>
+                <button class="btn-action btn-edit"
+                        onclick="location.href='/reminder/edit/{{ r.id }}/'">
+                    Edit
+                </button>
+                <button class="btn-action btn-delete"
+                        onclick="if(confirm('Delete reminder?')) location.href='/reminder/delete/{{ r.id }}/'">
+                    Delete
+                </button>
+            </div>
+        </div>
+        {% endfor %}
+
+        {% for r in upcoming_reminders %}
+        <div class="reminder-card" style="border-left:4px solid #4caf50;">
+            <div class="reminder-info">
+                <strong>{{ r.title }}</strong>
+                <p>📅 {{ r.reminder_date }} • ⏰ {{ r.reminder_time }}</p>
+            </div>
+            <div>
+                <button class="btn-action btn-edit"
+                        onclick="location.href='/reminder/edit/{{ r.id }}/'">
+                    Edit
+                </button>
+                <button class="btn-action btn-delete"
+                        onclick="if(confirm('Delete reminder?')) location.href='/reminder/delete/{{ r.id }}/'">
+                    Delete
+                </button>
+            </div>
+        </div>
+        {% endfor %}
+
+        {% if not overdue_reminders and not today_reminders and not upcoming_reminders %}
+            <p style="color:rgba(255,255,255,0.6); margin-top:1rem;">
+                No reminders yet 🎉
+            </p>
+        {% endif %}
+
+        <button class="btn-add" style="margin-top:1.5rem;"
+                onclick="location.href='/reminder/add/'">
+            + Add Reminder
+        </button>
+    </div>
+
+    <!-- =======================
+         ADOPTION REQUESTS
+    ======================== -->
+    <div class="section">
+        <h2 class="section-title">My Adoption Requests</h2>
+
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Pet</th>
+                        <th>Breed</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for adoption in adoptions %}
+                    <tr>
+                        <td>{{ adoption.pet.name }}</td>
+                        <td>{{ adoption.pet.breed }}</td>
+                        <td>
+                            {% if adoption.status == 'pending' %}
+                                <span class="badge badge-pending">Pending</span>
+                            {% elif adoption.status == 'approved' %}
+                                <span class="badge badge-approved">Approved</span>
+                            {% else %}
+                                <span class="badge badge-rejected">Rejected</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if adoption.status == 'pending' %}
+                                <button class="btn-action btn-delete"
+                                    onclick="if(confirm('Cancel adoption request?')) location.href='/adoption/cancel/{{ adoption.id }}/'">
+                                    Cancel
+                                </button>
+                            {% else %}
+                                —
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="4" style="text-align:center; color:rgba(255,255,255,0.6);">
+                            No adoption requests yet
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

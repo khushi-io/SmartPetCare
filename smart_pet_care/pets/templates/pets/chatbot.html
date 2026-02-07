@@ -1,0 +1,106 @@
+{% extends 'pets/base.html' %}
+{% load static %}
+
+{% block title %}AI Pet Assistant - Smart Pet Care{% endblock %}
+
+{% block content %}
+<div class="page-container">
+    <h1 class="page-title">🤖 AI Pet Care Assistant</h1>
+
+    <div class="chatbot-container">
+
+        <!-- CHAT MESSAGES -->
+        <div class="chat-messages" id="chat-messages">
+
+            <!-- BOT WELCOME -->
+            <div class="message bot">
+                <div class="message-bubble">
+                    👋 Hi! I’m your AI Pet Assistant.<br><br>
+                    Ask me about:<br>
+                    🐶 Dogs • 🐱 Cats • 🐦 Birds<br>
+                    🍖 Feeding • 💉 Vaccination • ✂️ Grooming
+                </div>
+            </div>
+
+            <!-- CHAT HISTORY -->
+            {% for chat in chat_history %}
+                <div class="message user">
+                    <div class="message-bubble">
+                        {{ chat.query }}
+                    </div>
+                </div>
+
+                <div class="message bot">
+                    <div class="message-bubble">
+                        {{ chat.response }}
+                    </div>
+                </div>
+            {% endfor %}
+
+        </div>
+
+        <!-- INPUT -->
+        <div class="chat-input-container">
+            <form id="chat-form" method="POST" style="display:flex; gap:1rem; width:100%;">
+                {% csrf_token %}
+                <input type="text"
+                       name="message"
+                       id="chat-input"
+                       class="chat-input"
+                       placeholder="Ask something about pet care..."
+                       required>
+                <button type="submit" class="btn-send">Send</button>
+            </form>
+        </div>
+
+    </div>
+</div>
+
+<script>
+const form = document.getElementById('chat-form');
+const input = document.getElementById('chat-input');
+const messages = document.getElementById('chat-messages');
+
+form.addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    const text = input.value.trim();
+    if (!text) return;
+
+    // USER MESSAGE
+    messages.innerHTML += `
+        <div class="message user">
+            <div class="message-bubble">${text}</div>
+        </div>
+    `;
+
+    input.value = '';
+    messages.scrollTop = messages.scrollHeight;
+
+    // BOT TYPING
+    const typing = document.createElement('div');
+    typing.className = 'message bot';
+    typing.innerHTML = `<div class="message-bubble">Typing...</div>`;
+    messages.appendChild(typing);
+
+    fetch("{% url 'chatbot' %}", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+            "X-CSRFToken": "{{ csrf_token }}"
+        },
+        body: "message=" + encodeURIComponent(text)
+    })
+    .then(res => res.json())
+    .then(data => {
+        typing.remove();
+        messages.innerHTML += `
+            <div class="message bot">
+                <div class="message-bubble">${data.response}</div>
+            </div>
+        `;
+        messages.scrollTop = messages.scrollHeight;
+    });
+});
+</script>
+{% endblock %}
