@@ -1,4 +1,4 @@
-# 🐾 Smart Pet Care System
+# 🐾 Smart Pet Care & Adoption System
 
 > An AI-powered smart pet care platform designed to simplify pet management, health tracking, and pet-owner engagement.
 
