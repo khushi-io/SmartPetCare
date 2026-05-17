@@ -52,27 +52,23 @@ def pet_list(request):
 # ============================================
 # AUTHENTICATION
 # ============================================
-
 def register_view(request):
-    """
-    Register a new user
-    """
-    if request.user.is_authenticated:
-        return redirect('user_dashboard')
-
     if request.method == 'POST':
         form = UserRegisterForm(request.POST)
 
         if form.is_valid():
             user = form.save()
 
-            # Create profile automatically
             UserProfile.objects.create(user=user)
 
             messages.success(request, 'Account created successfully. Please login.')
             return redirect('login')
+
+        else:
+            print(form.errors)
+
     else:
-        print(form.errors)
+        form = UserRegisterForm()
 
     return render(request, 'pets/register.html', {'form': form})
 
