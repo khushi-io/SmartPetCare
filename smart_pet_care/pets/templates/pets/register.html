@@ -7,6 +7,12 @@
 <div class="form-container">
     <h2 style="text-align:center; margin-bottom:2rem; font-size:2rem;">Create Account</h2>
     
+{% if form.errors %}
+<div style="color:red; margin-bottom:20px;">
+    {{ form.errors }}
+</div>
+{% endif %}
+
     <form method="POST">
         {% csrf_token %}
         

@@ -72,7 +72,7 @@ def register_view(request):
             messages.success(request, 'Account created successfully. Please login.')
             return redirect('login')
     else:
-        form = UserRegisterForm()
+        print(form.errors)
 
     return render(request, 'pets/register.html', {'form': form})
 
