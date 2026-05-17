@@ -1,0 +1,89 @@
+{% extends 'pets/base.html' %}
+{% load static %}
+
+{% block title %}Edit Reminder - Smart Pet Care{% endblock %}
+
+{% block content %}
+<div class="form-container">
+
+    <h2 style="text-align:center; margin-bottom:2rem; font-size:2rem;">
+        Edit Reminder
+    </h2>
+
+    <form method="POST">
+        {% csrf_token %}
+
+        <!-- TITLE -->
+        <div class="form-group">
+            <label>Reminder Title</label>
+            <input type="text"
+                   name="title"
+                   value="{{ reminder.title }}"
+                   required>
+        </div>
+
+        <!-- DESCRIPTION -->
+        <div class="form-group">
+            <label>Description</label>
+            <textarea name="description" rows="3">{{ reminder.description }}</textarea>
+        </div>
+
+        <!-- REMINDER TYPE -->
+        <div class="form-group">
+            <label>Reminder Type</label>
+            <select name="reminder_type" required>
+                <option value="">Select Type</option>
+                <option value="vaccination" {% if reminder.reminder_type == 'vaccination' %}selected{% endif %}>Vaccination</option>
+                <option value="feeding" {% if reminder.reminder_type == 'feeding' %}selected{% endif %}>Feeding</option>
+                <option value="grooming" {% if reminder.reminder_type == 'grooming' %}selected{% endif %}>Grooming</option>
+                <option value="vet_visit" {% if reminder.reminder_type == 'vet_visit' %}selected{% endif %}>Vet Visit</option>
+                <option value="medication" {% if reminder.reminder_type == 'medication' %}selected{% endif %}>Medication</option>
+                <option value="other" {% if reminder.reminder_type == 'other' %}selected{% endif %}>Other</option>
+            </select>
+        </div>
+
+        <!-- DATE -->
+        <div class="form-group">
+            <label>Reminder Date</label>
+            <input type="date"
+                   name="reminder_date"
+                   value="{{ reminder.reminder_date|date:'Y-m-d' }}"
+                   required>
+        </div>
+
+        <!-- TIME -->
+        <div class="form-group">
+            <label>Reminder Time</label>
+            <input type="time"
+                   name="reminder_time"
+                   value="{{ reminder.reminder_time|time:'H:i' }}"
+                   required>
+        </div>
+
+        <!-- RECURRING (FIXED CHECKBOX) -->
+        <div class="form-group checkbox-group">
+            <label class="checkbox-wrapper">
+                <input type="checkbox"
+                       name="is_recurring"
+                       {% if reminder.is_recurring %}checked{% endif %}>
+                <span class="custom-checkbox"></span>
+                <span class="checkbox-text">Recurring Reminder</span>
+            </label>
+        </div>
+
+        <!-- SUBMIT -->
+        <button type="submit" class="btn-submit">
+            Update Reminder
+        </button>
+
+        <!-- BACK -->
+        <p style="text-align:center; margin-top:1.5rem;">
+            <a href="{% url 'user_dashboard' %}"
+               style="color:#667eea; text-decoration:none;">
+                ← Back to Dashboard
+            </a>
+        </p>
+
+    </form>
+</div>
+{% endblock %}

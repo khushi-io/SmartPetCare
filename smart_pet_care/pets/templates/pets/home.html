@@ -1,0 +1,57 @@
+{% extends 'pets/base.html' %}
+{% load static %}
+
+{% block title %}Home - Smart Pet Care{% endblock %}
+
+{% block content %}
+<div class="hero">
+    <h1>Care. Adopt. Connect.</h1>
+    <p>A next-generation smart platform for pet adoption, intelligent reminders, and AI-powered pet care assistance.</p>
+</div>
+
+<div class="features-grid">
+    <div class="feature-card">
+        <img src="https://images.unsplash.com/photo-1450778869180-41d0601e046e?w=800&h=400&fit=crop" class="feature-image" alt="Pet Adoption">
+        <div class="feature-content">
+            <h3>Pet Adoption</h3>
+            <p>Explore verified pets and give them a loving home through a secure and transparent adoption process.</p>
+            <button class="feature-btn" onclick="location.href='/pets/'">Explore Pets</button>
+        </div>
+    </div>
+
+    <div class="feature-card">
+        <img src="https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?w=800&h=400&fit=crop" class="feature-image" alt="Adoption Requests">
+        <div class="feature-content">
+            <h3>Adoption Requests</h3>
+            <p>Track adoption requests and receive admin approval updates in real time.</p>
+            {% if user.is_authenticated %}
+                <button class="feature-btn" onclick="location.href='/dashboard/'">View Requests</button>
+            {% else %}
+                <button class="feature-btn" onclick="alert('Please login first'); location.href='/login/'">View Requests</button>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="feature-card">
+        <img src="https://images.unsplash.com/photo-1415369629372-26f2fe60c467?w=800&h=400&fit=crop" class="feature-image" alt="Smart Reminders">
+        <div class="feature-content">
+            <h3>Smart Reminders</h3>
+            <p>AI-assisted reminders for feeding, medication, vet visits, and routine pet care.</p>
+            {% if user.is_authenticated %}
+                <button class="feature-btn" onclick="location.href='/dashboard/'">Manage Reminders</button>
+            {% else %}
+                <button class="feature-btn" onclick="alert('Please login first'); location.href='/login/'">Manage Reminders</button>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="feature-card">
+        <img src="https://images.unsplash.com/photo-1548681528-6a5c45b66b42?w=800&h=400&fit=crop" class="feature-image" alt="AI Assistant">
+        <div class="feature-content">
+            <h3>AI Pet Assistant</h3>
+            <p>Ask intelligent questions about pet health, food, behavior, and wellness.</p>
+            <button class="feature-btn" onclick="location.href='/chatbot/'">Launch Assistant</button>
+        </div>
+    </div>
+</div>
+{% endblock %}

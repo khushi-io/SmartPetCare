@@ -1,0 +1,83 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Smart Pet Care{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'pets/css/style.css' %}">
+</head>
+<body>
+
+    <!-- Background Effects -->
+    <div class="animated-bg"></div>
+    <div class="particles" id="particles"></div>
+
+    <!-- NAVBAR -->
+    <nav>
+        <div class="logo" onclick="location.href='/'">🐾 SMART PET CARE & ADOPTION SYSTEM</div>
+
+        <div class="nav-buttons">
+            <!-- AUTHENTICATED USERS -->
+            {% if user.is_authenticated %}
+
+                <!-- HOME (FOR EVERYONE) -->
+                <button class="btn btn-login" onclick="location.href='/'">Home</button>
+
+                <!-- USER DASHBOARD (ONLY NORMAL USERS) -->
+                  {% if not user.is_superuser %}
+                <button class="btn btn-login"
+                        onclick="location.href='/dashboard/'">
+                    Dashboard
+                </button>
+            {% endif %}
+
+                <!-- ADMIN PANEL (ONLY SUPERUSER) -->
+                {% if user.is_superuser %}
+                    <button class="btn btn-admin" onclick="location.href='/admin/'">
+                        Admin Panel
+                    </button>
+                {% endif %}
+
+                <!-- LOGOUT -->
+                <form method="POST" action="/logout/" style="display:inline;">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-register">Logout</button>
+                </form>
+
+            {% else %}
+
+                <!-- GUEST USERS -->
+                <button class="btn btn-login" onclick="location.href='/login/'">Login</button>
+                <button class="btn btn-register" onclick="location.href='/register/'">Register</button>
+                <button class="btn btn-admin" onclick="location.href='/admin/'">Admin</button>
+
+            {% endif %}
+        </div>
+    </nav>
+
+    <!-- FLASH MESSAGES -->
+    <main>
+        {% if messages %}
+            <div class="messages-container">
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        © 2025 Smart Pet Care & Adoption System | MCA Mini Project I
+    </footer>
+
+    <!-- SCRIPTS -->
+    <script src="{% static 'pets/js/main.js' %}"></script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>
